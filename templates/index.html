@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAY.ai — Akıllı Telekom Müşteri Analizi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cyan: #00d4ff; --cyan2: #0099cc; --purple: #8b6dff;
+  --red: #ff5577; --green: #00e89e; --amber: #ffba30;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --font-display: 'Manrope', 'Inter', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body.dark {
+  --bg: #07091c; --bg2: #0a1430;
+  --surface: rgba(80,140,255,0.05);
+  --surface2: rgba(80,140,255,0.09);
+  --surface3: rgba(80,140,255,0.14);
+  --border: rgba(120,170,255,0.11);
+  --border2: rgba(120,170,255,0.18);
+  --border3: rgba(120,170,255,0.28);
+  --text: #f0f3ff;
+  --text2: #b5bedb;
+  --text3: #6e7796;
+  --header-bg: rgba(8,9,26,0.78);
+  --gradient-text-start: #ffffff;
+  --gradient-text-end: #a4b0d8;
+  --atmo-1: rgba(0,170,255,0.13);
+  --atmo-2: rgba(60,130,255,0.10);
+  --atmo-3: rgba(139,109,255,0.06);
+}
+
+body.light {
+  --bg: #eef3fb; --bg2: #e3edfa;
+  --surface: rgba(40,90,200,0.05);
+  --surface2: rgba(40,90,200,0.09);
+  --surface3: rgba(40,90,200,0.14);
+  --border: rgba(20,60,150,0.11);
+  --border2: rgba(20,60,150,0.17);
+  --border3: rgba(20,60,150,0.25);
+  --text: #0d1228;
+  --text2: #4a5374;
+  --text3: #828ba8;
+  --header-bg: rgba(243,245,251,0.88);
+  --gradient-text-start: #0d1228;
+  --gradient-text-end: #4a5374;
+  --cyan: #0099cc; --cyan2: #007aa3;
+  --red: #d92e52; --green: #00a972; --amber: #d99410;
+  --atmo-1: rgba(0,130,220,0.14);
+  --atmo-2: rgba(40,100,200,0.10);
+  --atmo-3: rgba(139,109,255,0.06);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.011em;
+  overflow-x: hidden;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 65% 50% at 12% -8%, var(--atmo-1) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 88% 102%, var(--atmo-2) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 50% 50%, var(--atmo-3) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+.icon {
+  width: 16px; height: 16px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.icon-lg { width: 18px; height: 18px; }
+.icon-sm { width: 14px; height: 14px; }
+
+header {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 64px;
+  background: var(--header-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-left { display: flex; align-items: center; gap: 24px; }
+
+.logo {
+  display: flex; align-items: center; gap: 11px;
+  font-family: var(--font-display);
+}
+
+.logo-text-group {
+  display: flex; flex-direction: column;
+  line-height: 1.1;
+}
+
+.logo-name {
+  font-size: 0.98rem; font-weight: 700; letter-spacing: -0.025em;
+  color: var(--text);
+}
+
+.logo-tagline {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--text3);
+  margin-top: 1px;
+  font-family: var(--font-body);
+}
+
+.logo-mark {
+  width: 32px; height: 32px; border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  display: grid; place-items: center;
+  color: #000;
+}
+
+.header-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 14px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 100px;
+  font-size: 0.74rem; color: var(--text2); font-weight: 500;
+}
+
+.pulse-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 8px var(--green);
+  animation: pulse-anim 2s ease-in-out infinite;
+}
+
+@keyframes pulse-anim {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.header-right { display: flex; align-items: center; gap: 16px; }
+
+.header-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--border2);
+}
+
+.header-btn {
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  padding: 8px 4px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: color 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-btn:hover { color: var(--cyan); }
+
+.header-btn.theme-toggle {
+  padding: 6px;
+  border-radius: var(--radius-sm);
+}
+
+.header-btn.theme-toggle:hover {
+  background: var(--surface2);
+}
+
+.header-btn.exit {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  padding: 7px 14px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+.header-btn.exit:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: rgba(255,85,119,0.08);
+}
+
+#searchView {
+  position: relative; z-index: 1;
+  min-height: calc(100vh - 64px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 24px 80px;
+}
+
+.search-container { width: 100%; max-width: 580px; text-align: center; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px;
+  background: rgba(0,212,255,0.08);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 100px;
+  font-size: 0.7rem; font-weight: 600; color: var(--cyan);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 24px;
+  font-family: var(--font-body);
+}
+
+.eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); }
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  margin-bottom: 18px;
+  background: linear-gradient(170deg, var(--gradient-text-start) 0%, var(--gradient-text-end) 95%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-sub {
+  font-size: 1rem; color: var(--text2);
+  line-height: 1.6; margin-bottom: 32px;
+}
+
+.search-wrapper { position: relative; }
+
+.search-field {
+  display: flex; align-items: center;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg); overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.search-field:focus-within {
+  border-color: var(--cyan); background: var(--surface3);
+  box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+}
+
+.search-icon {
+  padding: 0 14px 0 18px;
+  color: var(--text3);
+  display: flex; align-items: center;
+}
+
+#customerIdInput {
+  flex: 1; background: transparent; border: none; outline: none;
+  padding: 16px 0; color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 1rem; font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+#customerIdInput::placeholder { color: var(--text3); font-weight: 400; }
+
+.search-btn {
+  margin: 6px;
+  padding: 11px 22px;
+  background: linear-gradient(135deg, var(--cyan), var(--cyan2));
+  border: none; border-radius: var(--radius-md); color: #000;
+  font-family: var(--font-body);
+  font-weight: 700; font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+
+.search-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,212,255,0.25); }
+.search-btn .icon { color: #000; }
+
+#sampleList {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px); left: 0; right: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border3);
+  border-radius: var(--radius-md);
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 50;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  text-align: left;
+}
+
+#sampleList.active { display: block; }
+
+.sample-item {
+  padding: 11px 18px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+}
+
+.sample-item:last-child { border-bottom: none; }
+.sample-item:hover { background: rgba(0,212,255,0.08); color: var(--cyan); }
+
+.error-banner {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 12px 18px;
+  background: rgba(255,85,119,0.08);
+  border: 1px solid rgba(255,85,119,0.25);
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem; color: var(--red);
+  text-align: left;
+}
+
+.error-banner.active { display: flex; }
+
+.loading-bar {
+  display: none; margin-top: 10px; height: 2px;
+  border-radius: 2px; background: var(--border); overflow: hidden;
+}
+
+.loading-bar::after {
+  content: ''; display: block; height: 100%; width: 40%;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  animation: slide 1.2s ease-in-out infinite;
+}
+
+@keyframes slide {
+  0% { transform: translateX(-200%); } 100% { transform: translateX(400%); }
+}
+
+#dashboardView {
+  display: none; position: relative; z-index: 1;
+  height: calc(100vh - 64px);
+  grid-template-columns: 1fr 440px;
+}
+
+#dashboardView.visible { display: grid; }
+
+#dashboardView.readonly {
+  grid-template-columns: 1fr;
+}
+
+#dashboardView.readonly .right-panel {
+  display: none;
+}
+
+.left-panel {
+  overflow-y: auto;
+  padding: 32px 36px 56px;
+  border-right: 1px solid var(--border);
+  scrollbar-width: thin;
+}
+
+#dashboardView.readonly .left-panel {
+  border-right: none;
+  padding: 32px 48px 56px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.left-panel::-webkit-scrollbar { width: 5px; }
+.left-panel::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+.back-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--surface); border: 1px solid var(--border2);
+  color: var(--text2);
+  border-radius: var(--radius-sm); padding: 8px 14px;
+  font-size: 0.78rem; font-weight: 500;
+  cursor: pointer; margin-bottom: 28px;
+  transition: all 0.18s ease;
+  font-family: var(--font-body);
+}
+
+.back-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+
+.customer-hero {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 24px;
+  margin-bottom: 28px;
+}
+
+.customer-id-block h2 {
+  font-family: var(--font-display);
+  font-size: 1.85rem; font-weight: 800;
+  letter-spacing: -0.03em; margin-bottom: 6px; line-height: 1.05;
+}
+
+.customer-id-block .mono {
+  font-family: var(--font-mono);
+  font-size: 0.74rem; color: var(--text3);
+}
+
+.risk-gauge-card {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+}
+
+.risk-gauge-svg {
+  width: 100%; height: 100%;
+  transform: rotate(-90deg);
+}
+
+.risk-gauge-bg-track {
+  fill: none;
+  stroke: var(--surface3);
+  stroke-width: 12;
+}
+
+.risk-gauge-fill {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.risk-gauge-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+
+.risk-gauge-pct {
+  font-family: var(--font-display);
+  font-size: 2.7rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.risk-gauge-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-top: 6px;
+}
+
+.risk-gauge-meta {
+  font-size: 0.65rem;
+  color: var(--text3);
+  margin-top: 8px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.risk-color-high { color: var(--red); }
+.risk-color-mid  { color: var(--amber); }
+.risk-color-low  { color: var(--green); }
+
+.section-label {
+  font-size: 0.66rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text3);
+  margin: 28px 0 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.section-label .icon { width: 14px; height: 14px; color: var(--text2); }
+
+.section-label .badge-info {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 3px 9px; border-radius: 100px;
+  font-size: 0.6rem; letter-spacing: 0.04em;
+  color: var(--text2); text-transform: none; font-weight: 500;
+}
+
+.shap-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 8px 22px;
+  margin-bottom: 14px;
+}
+
+.shap-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.shap-row:last-child { border-bottom: none; }
+
+.shap-rank {
+  width: 26px; height: 26px; border-radius: var(--radius-sm);
+  background: var(--surface2); border: 1px solid var(--border);
+  display: grid; place-items: center;
+  font-size: 0.74rem; font-weight: 700;
+  color: var(--text2);
+  font-family: var(--font-mono);
+}
+
+.shap-content { flex: 1; min-width: 0; }
+
+.shap-label {
+  font-size: 0.86rem; font-weight: 500;
+  color: var(--text); margin-bottom: 6px;
+}
+
+.shap-bar-track {
+  position: relative; height: 4px;
+  background: var(--border);
+  border-radius: 2px; overflow: hidden;
+}
+
+.shap-bar-fill {
+  position: absolute; top: 0; bottom: 0;
+  border-radius: 2px; width: 0%;
+  transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shap-bar-fill.risk { right: 50%; background: linear-gradient(90deg, transparent, var(--red)); }
+.shap-bar-fill.protective { left: 50%; background: linear-gradient(90deg, var(--green), transparent); }
+
+.shap-bar-track::after {
+  content: ''; position: absolute;
+  left: 50%; top: -2px; bottom: -2px;
+  width: 1px; background: var(--border3);
+}
+
+.shap-impact {
+  font-size: 0.74rem;
+  font-family: var(--font-mono);
+  font-weight: 600; min-width: 64px;
+  text-align: right;
+}
+
+.shap-impact.risk { color: var(--red); }
+.shap-impact.protective { color: var(--green); }
+
+.shap-legend {
+  display: flex; gap: 16px;
+  margin-bottom: 20px;
+  padding: 0 4px;
+  font-size: 0.72rem;
+  color: var(--text2);
+}
+
+.shap-legend-item {
+  display: flex; align-items: center; gap: 7px;
+}
+
+.shap-legend-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+
+.shap-legend-dot.risk { background: var(--red); }
+.shap-legend-dot.protective { background: var(--green); }
+
+.cards-grid { display: grid; gap: 10px; margin-bottom: 4px; }
+.g2 { grid-template-columns: 1fr 1fr; }
+.g3 { grid-template-columns: 1fr 1fr 1fr; }
+
+#dashboardView.readonly .g3 { grid-template-columns: repeat(4, 1fr); }
+#dashboardView.readonly .g2 { grid-template-columns: repeat(3, 1fr); }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 14px 16px;
+  transition: all 0.18s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--cyan), transparent);
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--border3);
+  background: var(--surface2);
+}
+
+.card:hover::before {
+  opacity: 0.85;
+}
+
+.card-label {
+  font-size: 0.66rem; font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.card-value {
+  font-size: 1.18rem; font-weight: 700;
+  letter-spacing: -0.025em;
+  font-family: var(--font-mono);
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.card-value.c-red    { color: var(--red); }
+.card-value.c-green  { color: var(--green); }
+.card-value.c-cyan   { color: var(--cyan); }
+.card-value.c-amber  { color: var(--amber); }
+.card-value.c-muted  { color: var(--text3); font-size: 1rem; font-family: var(--font-body); font-weight: 500; }
+
+.right-panel {
+  display: flex; flex-direction: column;
+  background: var(--bg2);
+  overflow: hidden;
+  border-left: 1px solid var(--border2);
+  box-shadow: -8px 0 32px rgba(0,80,200,0.08), inset 1px 0 0 rgba(80,140,255,0.06);
+  position: relative;
+}
+
+.right-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(80,140,255,0.04) 0%, transparent 30%, transparent 70%, rgba(139,109,255,0.04) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.right-panel > * { position: relative; z-index: 1; }
+
+.chat-header {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.chat-header-top {
+  display: flex; align-items: center; gap: 11px;
+}
+
+.ai-avatar {
+  width: 32px; height: 32px; border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  display: grid; place-items: center;
+  color: #000;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.ai-avatar::after {
+  content: ''; position: absolute; bottom: -1px; right: -1px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--green); border: 2px solid var(--bg2);
+}
+
+.chat-header h3 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+}
+.chat-header p { font-size: 0.72rem; color: var(--text2); margin-top: 2px; }
+
+.chat-messages {
+  flex: 1; overflow-y: auto;
+  padding: 18px 16px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+.chat-messages::-webkit-scrollbar { width: 5px; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+.msg { display: flex; flex-direction: column; gap: 5px; animation: msgFade 0.3s ease; }
+.msg.user { align-items: flex-end; }
+.msg.bot  { align-items: flex-start; }
+
+@keyframes msgFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.msg-sender {
+  font-size: 0.66rem; color: var(--text3);
+  padding: 0 4px; font-weight: 500;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+
+.msg-bubble {
+  max-width: 100%;
+  padding: 13px 17px;
+  border-radius: var(--radius-md);
+  font-size: 0.87rem; line-height: 1.65;
+  word-wrap: break-word;
+}
+
+.msg.user .msg-bubble {
+  max-width: 88%;
+  background: linear-gradient(135deg, rgba(0,212,255,0.18), rgba(139,109,255,0.18));
+  border: 1px solid rgba(0,212,255,0.22);
+  border-radius: var(--radius-md) var(--radius-md) 3px var(--radius-md);
+}
+
+.msg.bot .msg-bubble {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 3px var(--radius-md) var(--radius-md) var(--radius-md);
+}
+
+.msg-bubble h2 {
+  font-family: var(--font-display);
+  font-size: 0.96rem; font-weight: 700;
+  margin: 16px 0 7px 0;
+  color: var(--cyan);
+  letter-spacing: -0.022em;
+}
+
+.msg-bubble h2:first-child { margin-top: 0; }
+.msg-bubble h3 { font-size: 0.86rem; font-weight: 600; margin: 12px 0 5px 0; }
+
+.msg-bubble p { margin: 7px 0; }
+.msg-bubble p:first-child { margin-top: 0; }
+.msg-bubble p:last-child { margin-bottom: 0; }
+
+.msg-bubble strong { color: var(--text); font-weight: 700; }
+
+.msg-bubble ul { margin: 8px 0; padding-left: 2px; list-style: none; }
+
+.msg-bubble li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 7px;
+}
+
+.msg-bubble li::before {
+  content: ''; position: absolute;
+  left: 6px; top: 0.7em;
+  width: 5px; height: 5px;
+  border-radius: 50%; background: var(--cyan); opacity: 0.8;
+}
+
+.typing-dots {
+  display: flex; gap: 5px; padding: 14px 18px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 3px var(--radius-md) var(--radius-md) var(--radius-md);
+  width: fit-content;
+}
+
+.typing-dots span {
+  width: 6px; height: 6px;
+  background: var(--text3); border-radius: 50%;
+  animation: blink 1.2s infinite;
+}
+
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(1); }
+  40% { opacity: 1; transform: scale(1.3); background: var(--cyan); }
+}
+
+.quick-prompts {
+  padding: 12px 14px;
+  border-top: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; gap: 7px;
+}
+
+.qp-btn {
+  background: var(--surface2); border: 1px solid var(--border2);
+  color: var(--text2);
+  border-radius: 100px; padding: 6px 13px;
+  font-size: 0.74rem; font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer; transition: all 0.18s ease;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+
+.qp-btn .icon { width: 12px; height: 12px; }
+
+.qp-btn:hover {
+  border-color: var(--cyan); color: var(--cyan);
+  background: rgba(0,212,255,0.08);
+}
+
+.chat-input-area {
+  padding: 12px 14px 14px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: flex-end; gap: 8px;
+}
+
+#chatInput {
+  flex: 1; background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-md); padding: 11px 16px;
+  color: var(--text); font-family: var(--font-body);
+  font-size: 0.87rem; resize: none;
+  min-height: 44px; max-height: 120px;
+  outline: none; transition: border-color 0.2s;
+  scrollbar-width: none;
+}
+
+#chatInput:focus { border-color: var(--cyan); }
+#chatInput::-webkit-scrollbar { display: none; }
+
+.send-btn {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--cyan), var(--cyan2));
+  border: none; border-radius: var(--radius-md);
+  color: #000; cursor: pointer;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  transition: all 0.18s ease;
+}
+
+.send-btn:hover { transform: scale(1.04); box-shadow: 0 4px 16px rgba(0,212,255,0.3); }
+.send-btn .icon { color: #000; width: 18px; height: 18px; }
+
+.fade-in { animation: fadeIn 0.6s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in-d1 { animation-delay: 0.1s; opacity: 0; }
+.fade-in-d2 { animation-delay: 0.2s; opacity: 0; }
+.fade-in-d3 { animation-delay: 0.3s; opacity: 0; }
+</style>
+</head>
+<body class="dark">
+
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="icon-bolt" viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></symbol>
+    <symbol id="icon-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 5l-7 7 7 7"/></symbol>
+    <symbol id="icon-warning" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="icon-bot" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M12 7V4M8 4h8M9 13h.01M15 13h.01M9 17h6"/></symbol>
+    <symbol id="icon-send" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></symbol>
+    <symbol id="icon-trending" viewBox="0 0 24 24"><path d="M22 7l-9 9-5-5-7 7"/><path d="M16 7h6v6"/></symbol>
+    <symbol id="icon-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></symbol>
+    <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></symbol>
+    <symbol id="icon-repeat" viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="icon-brain" viewBox="0 0 24 24"><path d="M9.5 2A2.5 2.5 0 0112 4.5v15a2.5 2.5 0 01-4.96.44 2.5 2.5 0 01-2.96-3.08 3 3 0 01-.34-5.58 2.5 2.5 0 011.32-4.24 2.5 2.5 0 014.44-1.04zM14.5 2A2.5 2.5 0 0012 4.5v15a2.5 2.5 0 004.96.44 2.5 2.5 0 002.96-3.08 3 3 0 00.34-5.58 2.5 2.5 0 00-1.32-4.24 2.5 2.5 0 00-4.44-1.04z"/></symbol>
+    <symbol id="icon-lightbulb" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.74V17h8v-2.26A7 7 0 0012 2z"/></symbol>
+    <symbol id="icon-clipboard" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="header-left">
+    <div class="logo">
+      <div class="logo-mark"><svg class="icon" viewBox="0 0 24 24"><use href="#icon-bolt"/></svg></div>
+      <div class="logo-text-group">
+        <div class="logo-name">STAY.ai</div>
+        <div class="logo-tagline">Smart Telecom Analysis for You</div>
+      </div>
+    </div>
+    <div class="header-pill">
+      <span class="pulse-dot"></span>
+      Müşteri Kayıp Önleme Sistemi
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="header-btn theme-toggle" onclick="PulseTheme.toggle()" title="Tema değiştir">
+      <svg class="icon sun-icon" viewBox="0 0 24 24"><use href="#icon-sun"/></svg>
+      <svg class="icon moon-icon" viewBox="0 0 24 24"><use href="#icon-moon"/></svg>
+    </button>
+    <button class="header-btn" onclick="PulseHelp && PulseHelp.open()">Yardım</button>
+    <div class="header-divider"></div>
+    <button class="header-btn exit" onclick="logoutAndRedirect()">Çıkış Yap</button>
+  </div>
+</header>
+
+<div id="searchView">
+  <div class="search-container">
+    <div class="eyebrow fade-in">
+      <span class="eyebrow-dot"></span>
+      CatBoost · SHAP · Gemini AI
+    </div>
+    <h1 class="hero-title fade-in fade-in-d1">Müşteri Riski<br>Analizi</h1>
+    <p class="hero-sub fade-in fade-in-d2">
+      Müşteri ID'sini girerek anlık kayıp olasılığını,<br>
+      SHAP destekli açıklamayı ve AI önerisini görüntüleyin.
+    </p>
+
+    <div class="fade-in fade-in-d3 search-wrapper">
+      <div class="search-field">
+        <span class="search-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#icon-search"/></svg></span>
+        <input type="text" id="customerIdInput"
+               placeholder="Müşteri ID girin veya listeden seçin..."
+               autocomplete="off"
+               onfocus="showSampleList()"
+               oninput="filterSampleList(this.value)"
+               onblur="hideSampleListDelayed()"
+               onkeydown="if(event.key==='Enter') searchCustomer()">
+        <button class="search-btn" onclick="searchCustomer()">
+          Analiz Et
+          <svg class="icon" viewBox="0 0 24 24"><use href="#icon-arrow-right"/></svg>
+        </button>
+      </div>
+      <div class="loading-bar" id="loadingBar"></div>
+      <div id="sampleList"></div>
+    </div>
+
+    <div class="error-banner" id="errorBanner">
+      <svg class="icon" viewBox="0 0 24 24"><use href="#icon-warning"/></svg>
+      <span id="errorBannerText"></span>
+    </div>
+  </div>
+</div>
+
+<div id="dashboardView">
+  <div class="left-panel">
+    <button class="back-btn" onclick="goBack()">
+      <svg class="icon icon-sm" viewBox="0 0 24 24"><use href="#icon-arrow-left"/></svg>
+      Geri
+    </button>
+
+    <div class="customer-hero" id="customerHero"></div>
+
+    <div id="shapSection"></div>
+    <div id="customerCards"></div>
+  </div>
+
+  <div class="right-panel">
+    <div class="chat-header">
+      <div class="chat-header-top">
+        <div class="ai-avatar">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#icon-bot"/></svg>
+        </div>
+        <div>
+          <h3>AI Strateji Asistanı</h3>
+          <p>SHAP açıklaması üzerinden aksiyon önerir</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <div class="quick-prompts">
+      <button class="qp-btn" onclick="sendQuick('Bu müşterinin churn riskini artıran en önemli 3 faktör nedir?')">
+        <svg class="icon" viewBox="0 0 24 24"><use href="#icon-search"/></svg>
+        Risk faktörleri
+      </button>
+      <button class="qp-btn" onclick="sendQuick('Bu müşteriye hangi teklifi sunmalıyım?')">
+        <svg class="icon" viewBox="0 0 24 24"><use href="#icon-lightbulb"/></svg>
+        Teklif öner
+      </button>
+      <button class="qp-btn" onclick="sendQuick('Bu müşteriyi arayacak temsilci için kısa senaryo yaz')">
+        <svg class="icon" viewBox="0 0 24 24"><use href="#icon-phone"/></svg>
+        Senaryo
+      </button>
+      <button class="qp-btn" onclick="sendQuick('Bu müşterinin genel özetini ver')">
+        <svg class="icon" viewBox="0 0 24 24"><use href="#icon-clipboard"/></svg>
+        Özet
+      </button>
+    </div>
+
+    <div class="chat-input-area">
+      <textarea id="chatInput" rows="1" placeholder="Soru sorun..." onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); sendMessage();}"></textarea>
+      <button class="send-btn" onclick="sendMessage()">
+        <svg class="icon" viewBox="0 0 24 24"><use href="#icon-send"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="/static/yardim.js"></script>
+<script>
+(function() {
+  const root = document.body;
+  window.PulseTheme = {
+    toggle() {
+      if (root.classList.contains('dark')) {
+        root.classList.remove('dark');
+        root.classList.add('light');
+      } else {
+        root.classList.remove('light');
+        root.classList.add('dark');
+      }
+      this.updateButton();
+    },
+    updateButton() {
+      const isDark = root.classList.contains('dark');
+      document.querySelectorAll('.theme-toggle .sun-icon').forEach(el => {
+        el.style.display = isDark ? 'none' : 'block';
+      });
+      document.querySelectorAll('.theme-toggle .moon-icon').forEach(el => {
+        el.style.display = isDark ? 'block' : 'none';
+      });
+    }
+  };
+  PulseTheme.updateButton();
+})();
+</script>
+<script>
+const TOKEN = sessionStorage.getItem('pulse_token');
+const ROLE  = sessionStorage.getItem('pulse_role');
+const NAME  = sessionStorage.getItem('pulse_name');
+
+if (!TOKEN) {
+  window.location.href = '/';
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+const PRELOAD_CID = urlParams.get('cid');
+const READONLY = urlParams.get('readonly') === '1';
+
+const API_BASE = '';
+let currentCustomer = null;
+let conversationHistory = [];
+let isTyping = false;
+let SAMPLE_IDS = [];
+
+function logoutAndRedirect() {
+  sessionStorage.clear();
+  window.location.href = '/';
+}
+
+async function loadSampleCustomers() {
+  SAMPLE_IDS = [3018770, 3319950, 3264210, 3313802, 3002618, 3335330, 3249666, 3241998];
+}
+
+function renderSampleList(ids) {
+  const list = document.getElementById('sampleList');
+  if (!list) return;
+  list.innerHTML = ids.map(id =>
+    `<div class="sample-item" onmousedown="event.preventDefault()" onclick="selectSample(${id})">#${id}</div>`
+  ).join('');
+}
+
+function showSampleList() {
+  if (SAMPLE_IDS.length === 0) return;
+  renderSampleList(SAMPLE_IDS);
+  document.getElementById('sampleList').classList.add('active');
+}
+
+function filterSampleList(query) {
+  const q = String(query).trim();
+  if (!q) {
+    renderSampleList(SAMPLE_IDS);
+    document.getElementById('sampleList').classList.add('active');
+    return;
+  }
+  const filtered = SAMPLE_IDS.filter(id => String(id).includes(q));
+  if (filtered.length === 0) {
+    document.getElementById('sampleList').classList.remove('active');
+    return;
+  }
+  renderSampleList(filtered);
+  document.getElementById('sampleList').classList.add('active');
+}
+
+function hideSampleListDelayed() {
+  setTimeout(() => {
+    document.getElementById('sampleList').classList.remove('active');
+  }, 200);
+}
+
+function selectSample(id) {
+  document.getElementById('customerIdInput').value = id;
+  document.getElementById('sampleList').classList.remove('active');
+  searchCustomer();
+}
+
+async function searchCustomer() {
+  const input = document.getElementById('customerIdInput').value.trim();
+  if (!input) return;
+  const id = parseInt(input);
+  if (isNaN(id)) { showError('Lütfen geçerli bir müşteri ID girin.'); return; }
+
+  hideError();
+  showLoading(true);
+  document.getElementById('sampleList').classList.remove('active');
+
+  try {
+    const res = await fetch(`${API_BASE}/api/customer/${id}`, {
+      headers: { 'Authorization': 'Bearer ' + TOKEN }
+    });
+    if (res.status === 401) { logoutAndRedirect(); return; }
+    const data = await res.json();
+    if (!res.ok) { showError(extractError(data) || 'Bir hata oluştu.'); return; }
+    currentCustomer = data;
+    renderDashboard(data);
+  } catch (e) {
+    showError('Sunucuya bağlanılamadı.');
+  } finally {
+    showLoading(false);
+  }
+}
+
+function extractError(data) {
+  if (!data) return null;
+  if (typeof data.detail === 'string') return data.detail;
+  if (Array.isArray(data.detail)) {
+    return data.detail.map(e => (e && e.msg) ? e.msg : JSON.stringify(e)).join(' | ');
+  }
+  if (data.detail) return JSON.stringify(data.detail);
+  return null;
+}
+
+function showLoading(v) {
+  document.getElementById('loadingBar').style.display = v ? 'block' : 'none';
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorBanner');
+  document.getElementById('errorBannerText').textContent = msg;
+  el.classList.add('active');
+}
+
+function hideError() {
+  document.getElementById('errorBanner').classList.remove('active');
+}
+
+function v(x) {
+  if (x === null || x === undefined || x === '') return '—';
+  if (typeof x === 'number') return Number.isInteger(x) ? x : x.toFixed(2);
+  return x;
+}
+
+function zeroOrVal(val, suffix = '') {
+  if (val === null || val === undefined || val === '' || val === 0 || val === '0') {
+    return { text: 'Yok', cls: 'c-muted' };
+  }
+  return { text: v(val) + suffix, cls: '' };
+}
+
+function yesNo(val) {
+  if (val === 1 || val === '1' || val === 'Yes' || val === true) return { text: 'Evet', cls: 'c-green' };
+  if (val === 0 || val === '0' || val === 'No' || val === false) return { text: 'Hayır', cls: 'c-red' };
+  return { text: '—', cls: 'c-muted' };
+}
+
+function yesNoCard(label, val) {
+  const r = yesNo(val);
+  return `<div class="card"><div class="card-label">${label}</div>
+    <div class="card-value ${r.cls}" style="font-size:1rem;font-family:var(--font-body);">${r.text}</div></div>`;
+}
+
+function getRiskColorClass(pct) {
+  if (pct >= 50) return 'risk-color-high';
+  if (pct >= 30) return 'risk-color-mid';
+  return 'risk-color-low';
+}
+
+function getRiskLabel(pct) {
+  if (pct >= 50) return 'Yüksek Risk';
+  if (pct >= 30) return 'Orta Risk';
+  return 'Düşük Risk';
+}
+
+function renderShap(factors, maxAbs) {
+  if (!factors || factors.length === 0) return '<p style="color:var(--text3);padding:14px 0;text-align:center;">SHAP verisi yok.</p>';
+
+  return factors.map((f, i) => {
+    const isRisk = f.direction === 'risk_artirici';
+    const pct = (f.abs_impact / maxAbs * 50).toFixed(1);
+    const cls = isRisk ? 'risk' : 'protective';
+    const sign = isRisk ? '+' : '−';
+
+    return `
+      <div class="shap-row">
+        <div class="shap-rank">${i + 1}</div>
+        <div class="shap-content">
+          <div class="shap-label">${f.label}</div>
+          <div class="shap-bar-track">
+            <div class="shap-bar-fill ${cls}" style="width:${pct}%"></div>
+          </div>
+        </div>
+        <div class="shap-impact ${cls}">${sign}${(f.abs_impact * 100).toFixed(1)}%</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderRiskGauge(pct) {
+  const colorClass = getRiskColorClass(pct);
+  const label = getRiskLabel(pct);
+  const radius = 80;
+  const circumference = 2 * Math.PI * radius;
+
+  return `
+    <div class="risk-gauge-card ${colorClass}">
+      <svg class="risk-gauge-svg" viewBox="0 0 200 200">
+        <circle class="risk-gauge-bg-track" cx="100" cy="100" r="${radius}"></circle>
+        <circle class="risk-gauge-fill" cx="100" cy="100" r="${radius}"
+                stroke="currentColor"
+                stroke-dasharray="${circumference}"
+                stroke-dashoffset="${circumference}"
+                data-circumference="${circumference}"></circle>
+      </svg>
+      <div class="risk-gauge-center">
+        <div class="risk-gauge-pct" data-target="${pct}">0%</div>
+        <div class="risk-gauge-label">${label}</div>
+        <div class="risk-gauge-meta">Kayıp Olasılığı</div>
+      </div>
+    </div>
+  `;
+}
+
+function animateGauge() {
+  const fill = document.querySelector('.risk-gauge-fill');
+  const pctEl = document.querySelector('.risk-gauge-pct');
+  if (!fill || !pctEl) return;
+
+  const circumference = parseFloat(fill.getAttribute('data-circumference'));
+  const targetPct = parseInt(pctEl.getAttribute('data-target'), 10) || 0;
+  const targetOffset = circumference * (1 - targetPct / 100);
+
+  void fill.getBoundingClientRect();
+
+  requestAnimationFrame(() => {
+    fill.setAttribute('stroke-dashoffset', targetOffset);
+  });
+
+  const duration = 1600;
+  const startTime = performance.now();
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(targetPct * eased);
+    pctEl.textContent = current + '%';
+    if (progress < 1) requestAnimationFrame(step);
+    else pctEl.textContent = targetPct + '%';
+  }
+  requestAnimationFrame(step);
+}
+
+function sectionLabel(iconId, text, badgeText) {
+  return `<div class="section-label">
+    <svg class="icon" viewBox="0 0 24 24"><use href="#${iconId}"/></svg>
+    ${text}
+    ${badgeText ? `<span class="badge-info">${badgeText}</span>` : ''}
+  </div>`;
+}
+
+function renderDashboard(c) {
+  const pct  = Math.round((c.churn_proba || 0) * 100);
+
+  if (READONLY) {
+    document.getElementById('dashboardView').classList.add('readonly');
+  }
+
+  document.getElementById('customerHero').innerHTML = `
+    <div class="customer-id-block">
+      <h2>Müşteri #${c.CustomerID}</h2>
+      <span class="mono">ID · ${c.CustomerID} &nbsp;·&nbsp; ${c.Occupation || '—'}</span>
+    </div>
+    ${renderRiskGauge(pct)}
+  `;
+
+  setTimeout(animateGauge, 150);
+
+  const allFactors = c.shap_top_factors || [];
+  const maxAbs = Math.max(...allFactors.map(f => f.abs_impact), 0.01);
+
+  document.getElementById('shapSection').innerHTML = `
+    ${sectionLabel('icon-brain', 'SHAP Açıklaması', `Tahmini etkileyen ${allFactors.length} faktör`)}
+    <div class="shap-card">
+      ${renderShap(allFactors, maxAbs)}
+    </div>
+    <div class="shap-legend">
+      <div class="shap-legend-item"><span class="shap-legend-dot risk"></span> Riski artırır</div>
+      <div class="shap-legend-item"><span class="shap-legend-dot protective"></span> Riski azaltır</div>
+    </div>
+  `;
+
+  const roamingR = zeroOrVal(c.RoamingCalls);
+  const overageR = zeroOrVal(c.OverageMinutes, ' dk');
+  const droppedR = zeroOrVal(c.DroppedCalls);
+  const blockedR = zeroOrVal(c.BlockedCalls);
+  const careR    = zeroOrVal(c.CustomerCareCalls);
+  const retCallR = zeroOrVal(c.RetentionCalls);
+  const retAccR  = zeroOrVal(c.RetentionOffersAccepted);
+  const minR     = zeroOrVal(c.MonthlyMinutes);
+  const revR     = zeroOrVal(c.MonthlyRevenue);
+  const recR     = zeroOrVal(c.TotalRecurringCharge);
+
+  document.getElementById('customerCards').innerHTML = `
+    ${sectionLabel('icon-chart', 'Kullanım & Gelir')}
+    <div class="cards-grid g3">
+      <div class="card"><div class="card-label">Aylık Dakika</div>
+        <div class="card-value ${minR.cls || (c.MonthlyMinutes > 500 ? 'c-cyan' : '')}">${minR.text}</div></div>
+      <div class="card"><div class="card-label">Aylık Gelir</div>
+        <div class="card-value ${revR.cls || 'c-green'}">${revR.cls ? revR.text : '$' + v(c.MonthlyRevenue)}</div></div>
+      <div class="card"><div class="card-label">Toplam Aylık Ücret</div>
+        <div class="card-value ${recR.cls}">${recR.cls ? recR.text : '$' + v(c.TotalRecurringCharge)}</div></div>
+    </div>
+
+    ${sectionLabel('icon-trending', 'Trend (Son 3 Ay)')}
+    <div class="cards-grid g2">
+      ${(() => {
+        if (c.PercChangeRevenues === null || c.PercChangeRevenues === undefined || c.PercChangeRevenues === '')
+          return `<div class="card"><div class="card-label">Gelir Değişimi</div><div class="card-value c-muted">Veri yok</div></div>`;
+        return `<div class="card"><div class="card-label">Gelir Değişimi</div>
+          <div class="card-value ${c.PercChangeRevenues < 0 ? 'c-red' : (c.PercChangeRevenues > 0 ? 'c-green' : 'c-muted')}">${v(c.PercChangeRevenues)}%</div></div>`;
+      })()}
+      ${(() => {
+        if (c.PercChangeMinutes === null || c.PercChangeMinutes === undefined || c.PercChangeMinutes === '')
+          return `<div class="card"><div class="card-label">Dakika Değişimi</div><div class="card-value c-muted">Veri yok</div></div>`;
+        return `<div class="card"><div class="card-label">Dakika Değişimi</div>
+          <div class="card-value ${c.PercChangeMinutes < 0 ? 'c-red' : (c.PercChangeMinutes > 0 ? 'c-green' : 'c-muted')}">${v(c.PercChangeMinutes)}%</div></div>`;
+      })()}
+    </div>
+
+    ${sectionLabel('icon-phone', 'Çağrı Kalitesi')}
+    <div class="cards-grid g3">
+      <div class="card"><div class="card-label">Düşen Çağrı</div>
+        <div class="card-value ${droppedR.cls || (c.DroppedCalls > 2 ? 'c-red' : '')}">${droppedR.text}</div></div>
+      <div class="card"><div class="card-label">Engellenen</div>
+        <div class="card-value ${blockedR.cls || (c.BlockedCalls > 2 ? 'c-amber' : '')}">${blockedR.text}</div></div>
+      <div class="card"><div class="card-label">Müşteri Hizm.</div>
+        <div class="card-value ${careR.cls || (c.CustomerCareCalls > 2 ? 'c-red' : '')}">${careR.text}</div></div>
+    </div>
+
+    <div class="cards-grid g2">
+      <div class="card"><div class="card-label">Roaming Çağrı</div>
+        <div class="card-value ${roamingR.cls || (c.RoamingCalls > 0 ? 'c-amber' : '')}">${roamingR.text}</div></div>
+      <div class="card"><div class="card-label">Aşım Dakikası</div>
+        <div class="card-value ${overageR.cls || (c.OverageMinutes > 0 ? 'c-amber' : '')}">${overageR.text}</div></div>
+    </div>
+
+    ${sectionLabel('icon-repeat', 'Retention Geçmişi')}
+    <div class="cards-grid g3">
+      <div class="card"><div class="card-label">Retention Çağrısı</div>
+        <div class="card-value ${retCallR.cls || 'c-amber'}">${retCallR.text}</div></div>
+      <div class="card"><div class="card-label">Kabul Edilen Teklif</div>
+        <div class="card-value ${retAccR.cls || 'c-green'}">${retAccR.text}</div></div>
+      ${yesNoCard('Ekibe Başvurdu', c.MadeCallToRetentionTeam)}
+    </div>
+
+    ${sectionLabel('icon-user', 'Demografi')}
+    <div class="cards-grid g3">
+      <div class="card"><div class="card-label">Hizmet Süresi</div>
+        <div class="card-value ${(!c.MonthsInService || c.MonthsInService === 0) ? 'c-muted' : ''}">${(!c.MonthsInService || c.MonthsInService === 0) ? 'Bilinmiyor' : v(c.MonthsInService) + ' ay'}</div></div>
+      <div class="card"><div class="card-label">Yaş</div>
+        <div class="card-value ${(!c.AgeHH1 || c.AgeHH1 === 0) ? 'c-muted' : ''}">${(!c.AgeHH1 || c.AgeHH1 === 0) ? 'Bilinmiyor' : v(c.AgeHH1)}</div></div>
+      <div class="card"><div class="card-label">Gelir Grubu</div>
+        <div class="card-value ${(!c.IncomeGroup || c.IncomeGroup === 0) ? 'c-muted' : ''}">${(!c.IncomeGroup || c.IncomeGroup === 0) ? 'Bilinmiyor' : v(c.IncomeGroup) + ' / 9'}</div></div>
+    </div>
+
+    <div class="cards-grid g3">
+      ${yesNoCard('Çocuk Var', c.ChildrenInHH)}
+      ${yesNoCard('Kredi Kartı', c.CreditCard)}
+      ${yesNoCard('Yurt Dışı Seyahat', c.NewCellphoneUser)}
+    </div>
+
+    <div class="cards-grid g2">
+      ${yesNoCard('Posta Tekliflerine Yanıt', c.RespondsToMailOffers)}
+      ${yesNoCard('Posta ile Alışveriş', c.BuysViaMailOrder)}
+    </div>
+  `;
+
+  document.getElementById('searchView').style.display = 'none';
+  document.getElementById('dashboardView').classList.add('visible');
+
+  if (!READONLY) {
+    conversationHistory = [];
+    document.getElementById('chatMessages').innerHTML = '';
+    addBotMessage(`Merhaba! Müşteri #${c.CustomerID} için hazırım. Aşağıdaki hızlı butonları kullanabilir veya sorunu yazabilirsin.`);
+  }
+}
+
+function goBack() {
+  if (ROLE === 'manager' || READONLY) {
+    window.location.href = '/yonetici';
+    return;
+  }
+  document.getElementById('dashboardView').classList.remove('visible');
+  document.getElementById('searchView').style.display = 'flex';
+  document.getElementById('customerIdInput').value = '';
+  currentCustomer = null;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function renderMarkdown(text) {
+  if (!text) return '';
+  let html = escapeHtml(text);
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  const lines = html.split('\n');
+  let result = ''; let inList = false; let paragraphBuffer = [];
+
+  const flushParagraph = () => {
+    if (paragraphBuffer.length) {
+      result += '<p>' + paragraphBuffer.join(' ') + '</p>';
+      paragraphBuffer = [];
+    }
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) { flushParagraph(); if (inList) { result += '</ul>'; inList = false; } continue; }
+    if (trimmed.startsWith('<h2>') || trimmed.startsWith('<h3>')) {
+      flushParagraph();
+      if (inList) { result += '</ul>'; inList = false; }
+      result += trimmed;
+      continue;
+    }
+    if (/^[-*]\s+/.test(trimmed)) {
+      flushParagraph();
+      if (!inList) { result += '<ul>'; inList = true; }
+      result += '<li>' + trimmed.replace(/^[-*]\s+/, '') + '</li>';
+    } else {
+      if (inList) { result += '</ul>'; inList = false; }
+      paragraphBuffer.push(trimmed);
+    }
+  }
+  flushParagraph();
+  if (inList) result += '</ul>';
+  return result;
+}
+
+function addBotMessage(text) {
+  const messagesEl = document.getElementById('chatMessages');
+  const msg = document.createElement('div');
+  msg.className = 'msg bot';
+  msg.innerHTML = `
+    <div class="msg-sender">AI Asistan</div>
+    <div class="msg-bubble">${renderMarkdown(text)}</div>
+  `;
+  messagesEl.appendChild(msg);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function addUserMessage(text) {
+  const messagesEl = document.getElementById('chatMessages');
+  const msg = document.createElement('div');
+  msg.className = 'msg user';
+  msg.innerHTML = `
+    <div class="msg-sender">Sen</div>
+    <div class="msg-bubble">${escapeHtml(text)}</div>
+  `;
+  messagesEl.appendChild(msg);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function showTyping() {
+  const messagesEl = document.getElementById('chatMessages');
+  const el = document.createElement('div');
+  el.id = 'typingIndicator';
+  el.className = 'msg bot';
+  el.innerHTML = `
+    <div class="msg-sender">AI Asistan</div>
+    <div class="typing-dots"><span></span><span></span><span></span></div>
+  `;
+  messagesEl.appendChild(el);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function sendQuick(text) {
+  document.getElementById('chatInput').value = text;
+  sendMessage();
+}
+
+async function sendMessage() {
+  if (isTyping || !currentCustomer) return;
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  addUserMessage(text);
+  conversationHistory.push({ role: 'user', content: text });
+  input.value = ''; input.style.height = 'auto';
+  isTyping = true; showTyping();
+
+  try {
+    const res = await fetch(`${API_BASE}/api/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + TOKEN
+      },
+      body: JSON.stringify({
+        customer_id: currentCustomer.CustomerID,
+        messages: conversationHistory,
+        customer_data: currentCustomer
+      })
+    });
+    if (res.status === 401) { logoutAndRedirect(); return; }
+    const data = await res.json();
+    hideTyping();
+    if (!res.ok) {
+      const errMsg = extractError(data) || 'Bir hata oluştu.';
+      console.error('Chat API hatası:', data);
+      addBotMessage('⚠ ' + errMsg);
+    } else {
+      const botReply = data.reply || data.response || '';
+      addBotMessage(botReply);
+      conversationHistory.push({ role: 'assistant', content: botReply });
+    }
+  } catch (e) {
+    hideTyping();
+    addBotMessage('⚠ Sunucuya bağlanılamadı.');
+  } finally {
+    isTyping = false;
+  }
+}
+
+document.getElementById('chatInput').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+
+(async () => {
+  await loadSampleCustomers();
+  if (PRELOAD_CID) {
+    document.getElementById('customerIdInput').value = PRELOAD_CID;
+    searchCustomer();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAY.ai — Yönetici Paneli · Akıllı Telekom Müşteri Analizi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cyan: #00d4ff; --cyan2: #0099cc; --purple: #8b6dff;
+  --red: #ff5577; --green: #00e89e; --amber: #ffba30;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --font-display: 'Manrope', 'Inter', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body.dark {
+  --bg: #07091c; --bg2: #0a1430;
+  --surface: rgba(80,140,255,0.05);
+  --surface2: rgba(80,140,255,0.09);
+  --surface3: rgba(80,140,255,0.14);
+  --border: rgba(120,170,255,0.11);
+  --border2: rgba(120,170,255,0.18);
+  --border3: rgba(120,170,255,0.28);
+  --text: #f0f3ff;
+  --text2: #b5bedb;
+  --text3: #6e7796;
+  --header-bg: rgba(8,9,26,0.78);
+  --gradient-text-start: #ffffff;
+  --gradient-text-end: #a4b0d8;
+  --atmo-1: rgba(0,170,255,0.13);
+  --atmo-2: rgba(60,130,255,0.10);
+  --atmo-3: rgba(139,109,255,0.06);
+}
+
+body.light {
+  --bg: #eef3fb; --bg2: #e3edfa;
+  --surface: rgba(40,90,200,0.05);
+  --surface2: rgba(40,90,200,0.09);
+  --surface3: rgba(40,90,200,0.14);
+  --border: rgba(20,60,150,0.11);
+  --border2: rgba(20,60,150,0.17);
+  --border3: rgba(20,60,150,0.25);
+  --text: #0d1228;
+  --text2: #4a5374;
+  --text3: #828ba8;
+  --header-bg: rgba(243,245,251,0.88);
+  --gradient-text-start: #0d1228;
+  --gradient-text-end: #4a5374;
+  --cyan: #0099cc; --cyan2: #007aa3;
+  --red: #d92e52; --green: #00a972; --amber: #d99410;
+  --atmo-1: rgba(0,130,220,0.14);
+  --atmo-2: rgba(40,100,200,0.10);
+  --atmo-3: rgba(139,109,255,0.06);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.011em;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 65% 50% at 12% -8%, var(--atmo-1) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 88% 102%, var(--atmo-2) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 50% 50%, var(--atmo-3) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+.icon {
+  width: 16px; height: 16px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+header {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 64px;
+  background: var(--header-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-left { display: flex; align-items: center; gap: 24px; }
+
+.logo {
+  display: flex; align-items: center; gap: 11px;
+  font-family: var(--font-display);
+}
+
+.logo-text-group {
+  display: flex; flex-direction: column;
+  line-height: 1.1;
+}
+
+.logo-name {
+  font-size: 0.98rem; font-weight: 700; letter-spacing: -0.025em;
+  color: var(--text);
+}
+
+.logo-tagline {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--text3);
+  margin-top: 1px;
+  font-family: var(--font-body);
+}
+
+.logo-mark {
+  width: 32px; height: 32px; border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  display: grid; place-items: center;
+  color: #000;
+}
+
+.header-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 14px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 100px;
+  font-size: 0.74rem; color: var(--text2); font-weight: 500;
+}
+
+.pulse-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 8px var(--green);
+  animation: pulse-anim 2s ease-in-out infinite;
+}
+
+@keyframes pulse-anim {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.header-right { display: flex; align-items: center; gap: 16px; }
+
+.header-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--border2);
+}
+
+.header-btn {
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  padding: 8px 4px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: color 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-btn:hover { color: var(--cyan); }
+
+.header-btn.theme-toggle {
+  padding: 6px;
+  border-radius: var(--radius-sm);
+}
+
+.header-btn.theme-toggle:hover {
+  background: var(--surface2);
+}
+
+.header-btn.exit {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  padding: 7px 14px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+.header-btn.exit:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: rgba(255,85,119,0.08);
+}
+
+.container {
+  position: relative; z-index: 1;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 40px 36px 80px;
+}
+
+.page-hero {
+  display: flex; align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px; margin-bottom: 36px;
+}
+
+.page-hero-left h1 {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin-bottom: 8px;
+  background: linear-gradient(170deg, var(--gradient-text-start) 0%, var(--gradient-text-end) 95%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-hero-left p {
+  font-size: 0.95rem;
+  color: var(--text2);
+}
+
+.pdf-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px;
+  background: linear-gradient(135deg, var(--cyan), var(--cyan2));
+  border: none; border-radius: var(--radius-md);
+  color: #000; font-weight: 700; font-size: 0.88rem;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.18s ease;
+}
+
+.pdf-btn .icon { color: #000; }
+.pdf-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,212,255,0.25); }
+.pdf-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px 80px;
+  text-align: center;
+  min-height: 380px;
+}
+
+.loading-pulse {
+  position: relative;
+  width: 90px; height: 90px;
+  margin-bottom: 32px;
+}
+
+.loading-pulse::before,
+.loading-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--cyan);
+  opacity: 0;
+  animation: ringPulse 2s ease-out infinite;
+}
+
+.loading-pulse::after { animation-delay: 1s; }
+
+.loading-pulse-core {
+  position: absolute;
+  inset: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  animation: corePulse 1.4s ease-in-out infinite;
+  display: grid;
+  place-items: center;
+  color: #000;
+}
+
+@keyframes ringPulse {
+  0%   { transform: scale(0.5); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes corePulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,212,255,0.4); }
+  50%      { transform: scale(1.08); box-shadow: 0 0 24px 0 rgba(0,212,255,0.5); }
+}
+
+.loading-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 12px;
+}
+
+.loading-message {
+  font-size: 0.95rem;
+  color: var(--text2);
+  min-height: 24px;
+  transition: opacity 0.3s ease;
+  margin-bottom: 24px;
+  max-width: 480px;
+}
+
+.loading-progress {
+  width: 320px;
+  max-width: 90%;
+  height: 4px;
+  border-radius: 100px;
+  background: var(--surface2);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.loading-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  border-radius: 100px;
+  width: 0%;
+  transition: width 0.5s ease-out;
+}
+
+.loading-percent {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text3);
+  letter-spacing: 0.04em;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.summary-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-card:hover {
+  border-color: var(--border3);
+  background: var(--surface2);
+}
+
+.summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.summary-card.total { color: var(--cyan); }
+.summary-card.acil { color: var(--red); }
+.summary-card.proaktif { color: var(--amber); }
+.summary-card.sadakat { color: var(--green); }
+
+.summary-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+
+.summary-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: currentColor;
+}
+
+.summary-meta {
+  font-size: 0.75rem;
+  color: var(--text2);
+  margin-top: 8px;
+}
+
+.segment-section {
+  margin-bottom: 36px;
+}
+
+.segment-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.segment-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+}
+
+.segment-dot.acil { background: var(--red); box-shadow: 0 0 8px var(--red); }
+.segment-dot.proaktif { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+.segment-dot.sadakat { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+.segment-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+
+.segment-count {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--text3);
+  font-family: var(--font-mono);
+}
+
+.table-wrapper {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  text-align: left;
+  padding: 14px 18px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+tbody td {
+  padding: 14px 18px;
+  font-size: 0.88rem;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s ease;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+
+tbody tr {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+tbody tr:hover td {
+  background: rgba(0,212,255,0.04);
+}
+
+.cell-id {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--cyan);
+}
+
+.cell-pct {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.cell-pct.acil { color: var(--red); }
+.cell-pct.proaktif { color: var(--amber); }
+.cell-pct.sadakat { color: var(--green); }
+
+.cell-action {
+  text-align: right;
+}
+
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--cyan);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  transition: all 0.18s ease;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+.action-link .icon { width: 14px; height: 14px; }
+
+.action-link:hover {
+  background: rgba(0,212,255,0.08);
+  border-color: var(--cyan);
+}
+
+.empty-state {
+  padding: 36px 20px;
+  text-align: center;
+  color: var(--text3);
+  font-size: 0.88rem;
+}
+
+.error-banner {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: rgba(255,85,119,0.08);
+  border: 1px solid rgba(255,85,119,0.25);
+  border-radius: var(--radius-md);
+  color: var(--red);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fade-in { animation: fadeIn 0.5s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body class="dark">
+
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="icon-bolt" viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></symbol>
+    <symbol id="icon-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+    <symbol id="icon-warning" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="icon-loader" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="header-left">
+    <div class="logo">
+      <div class="logo-mark"><svg class="icon" viewBox="0 0 24 24"><use href="#icon-bolt"/></svg></div>
+      <div class="logo-text-group">
+        <div class="logo-name">STAY.ai</div>
+        <div class="logo-tagline">Smart Telecom Analysis for You</div>
+      </div>
+    </div>
+    <div class="header-pill">
+      <span class="pulse-dot"></span>
+      Yönetici Paneli
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="header-btn theme-toggle" onclick="PulseTheme.toggle()" title="Tema değiştir">
+      <svg class="icon sun-icon" viewBox="0 0 24 24"><use href="#icon-sun"/></svg>
+      <svg class="icon moon-icon" viewBox="0 0 24 24"><use href="#icon-moon"/></svg>
+    </button>
+    <button class="header-btn" onclick="PulseHelp && PulseHelp.open()">Yardım</button>
+    <div class="header-divider"></div>
+    <button class="header-btn exit" onclick="logoutAndRedirect()">Çıkış Yap</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="page-hero">
+    <div class="page-hero-left">
+      <h1>Yönetici Paneli</h1>
+      <p>Risk segmentlerine göre müşteri dağılımı ve aksiyon önceliği</p>
+    </div>
+    <button class="pdf-btn" id="pdfBtn" onclick="downloadPDF()" disabled>
+      <svg class="icon" viewBox="0 0 24 24"><use href="#icon-file"/></svg>
+      Raporu İndir (PDF)
+    </button>
+  </div>
+
+  <div id="loadingArea">
+    <div class="loading-screen">
+      <div class="loading-pulse">
+        <div class="loading-pulse-core">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#icon-bolt"/></svg>
+        </div>
+      </div>
+      <div class="loading-title">Müşteri Analizi Hesaplanıyor</div>
+      <div class="loading-message" id="loadingMessage">Veri seti yükleniyor...</div>
+      <div class="loading-progress">
+        <div class="loading-progress-fill" id="loadingFill"></div>
+      </div>
+      <div class="loading-percent" id="loadingPercent">0%</div>
+    </div>
+  </div>
+
+  <div id="contentArea" style="display:none;">
+    <div class="summary-grid">
+      <div class="summary-card total">
+        <div class="summary-label">Toplam İncelenen</div>
+        <div class="summary-value" id="totalCount">0</div>
+        <div class="summary-meta">son 100 müşteri</div>
+      </div>
+      <div class="summary-card acil">
+        <div class="summary-label">Acil Müdahale</div>
+        <div class="summary-value" id="acilCount">0</div>
+        <div class="summary-meta">≥ %50 kayıp olasılığı</div>
+      </div>
+      <div class="summary-card proaktif">
+        <div class="summary-label">Proaktif Yaklaşım</div>
+        <div class="summary-value" id="proaktifCount">0</div>
+        <div class="summary-meta">%30 — %50 aralığı</div>
+      </div>
+      <div class="summary-card sadakat">
+        <div class="summary-label">Sadakat Programı</div>
+        <div class="summary-value" id="sadakatCount">0</div>
+        <div class="summary-meta">&lt; %30, koru &amp; büyüt</div>
+      </div>
+    </div>
+
+    <div class="segment-section">
+      <div class="segment-header">
+        <span class="segment-dot acil"></span>
+        <div class="segment-title">Acil Müdahale Listesi</div>
+        <span class="segment-count" id="acilSubCount"></span>
+      </div>
+      <div class="table-wrapper">
+        <table id="acilTable">
+          <thead>
+            <tr>
+              <th>Müşteri ID</th>
+              <th>Risk</th>
+              <th>Aylık Gelir</th>
+              <th>Hizmet Süresi</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="segment-section">
+      <div class="segment-header">
+        <span class="segment-dot proaktif"></span>
+        <div class="segment-title">Proaktif Yaklaşım</div>
+        <span class="segment-count" id="proaktifSubCount"></span>
+      </div>
+      <div class="table-wrapper">
+        <table id="proaktifTable">
+          <thead>
+            <tr>
+              <th>Müşteri ID</th>
+              <th>Risk</th>
+              <th>Aylık Gelir</th>
+              <th>Hizmet Süresi</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="segment-section">
+      <div class="segment-header">
+        <span class="segment-dot sadakat"></span>
+        <div class="segment-title">Sadakat Programı Adayları</div>
+        <span class="segment-count" id="sadakatSubCount"></span>
+      </div>
+      <div class="table-wrapper">
+        <table id="sadakatTable">
+          <thead>
+            <tr>
+              <th>Müşteri ID</th>
+              <th>Risk</th>
+              <th>Aylık Gelir</th>
+              <th>Hizmet Süresi</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="errorArea"></div>
+</div>
+
+<script src="/static/yardim.js"></script>
+<script>
+(function() {
+  const root = document.body;
+  window.PulseTheme = {
+    toggle() {
+      if (root.classList.contains('dark')) {
+        root.classList.remove('dark');
+        root.classList.add('light');
+      } else {
+        root.classList.remove('light');
+        root.classList.add('dark');
+      }
+      this.updateButton();
+    },
+    updateButton() {
+      const isDark = root.classList.contains('dark');
+      document.querySelectorAll('.theme-toggle .sun-icon').forEach(el => {
+        el.style.display = isDark ? 'none' : 'block';
+      });
+      document.querySelectorAll('.theme-toggle .moon-icon').forEach(el => {
+        el.style.display = isDark ? 'block' : 'none';
+      });
+    }
+  };
+  PulseTheme.updateButton();
+})();
+</script>
+<script>
+const TOKEN = sessionStorage.getItem('pulse_token');
+const ROLE  = sessionStorage.getItem('pulse_role');
+
+if (!TOKEN || ROLE !== 'manager') {
+  window.location.href = '/';
+}
+
+function logoutAndRedirect() {
+  sessionStorage.clear();
+  window.location.href = '/';
+}
+
+const LOADING_MESSAGES = [
+  "Veri seti yükleniyor...",
+  "Müşteriler için CatBoost modeli hazırlanıyor...",
+  "Risk skorları hesaplanıyor...",
+  "SHAP değerleri her müşteri için ayrı ayrı çıkarılıyor...",
+  "En etkili faktörler sıralanıyor...",
+  "Risk segmentleri oluşturuluyor...",
+  "Yüksek riskli müşteriler önceliklendiriliyor...",
+  "Aksiyon listesi hazırlanıyor...",
+  "Son kontroller yapılıyor..."
+];
+
+let loadingActive = true;
+let messageIndex = 0;
+
+function rotateLoadingMessage() {
+  if (!loadingActive) return;
+  const msgEl = document.getElementById('loadingMessage');
+  if (!msgEl) return;
+  msgEl.style.opacity = '0';
+  setTimeout(() => {
+    messageIndex = (messageIndex + 1) % LOADING_MESSAGES.length;
+    msgEl.textContent = LOADING_MESSAGES[messageIndex];
+    msgEl.style.opacity = '1';
+  }, 250);
+}
+
+function animateProgress() {
+  const fill = document.getElementById('loadingFill');
+  const pct  = document.getElementById('loadingPercent');
+  if (!fill || !pct) return;
+  let current = 0;
+  const target = 92;
+  const startTime = performance.now();
+  const duration = 55000;
+
+  function step(now) {
+    if (!loadingActive) return;
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 2.3);
+    current = Math.round(target * eased);
+    fill.style.width = current + '%';
+    pct.textContent = current + '%';
+    if (progress < 1 && loadingActive) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function completeProgress() {
+  loadingActive = false;
+  const fill = document.getElementById('loadingFill');
+  const pct  = document.getElementById('loadingPercent');
+  if (fill) fill.style.width = '100%';
+  if (pct)  pct.textContent  = '100%';
+}
+
+const loadingInterval = setInterval(rotateLoadingMessage, 4500);
+animateProgress();
+
+function formatPct(p) {
+  return Math.round((p || 0) * 100) + '%';
+}
+
+function fmtMoney(v) {
+  if (v === null || v === undefined || v === '' || v === 0) return '—';
+  return '$' + (Number.isInteger(v) ? v : Number(v).toFixed(2));
+}
+
+function fmtMonths(v) {
+  if (v === null || v === undefined || v === '' || v === 0) return '—';
+  return v + ' ay';
+}
+
+function extractError(data) {
+  if (!data) return null;
+  if (typeof data.detail === 'string') return data.detail;
+  if (Array.isArray(data.detail)) return data.detail.map(e => (e && e.msg) ? e.msg : JSON.stringify(e)).join(' | ');
+  if (data.detail) return JSON.stringify(data.detail);
+  return null;
+}
+
+function rowHTML(c, tier) {
+  return `
+    <tr onclick="openCustomer(${c.CustomerID})">
+      <td class="cell-id">#${c.CustomerID}</td>
+      <td class="cell-pct ${tier}">${formatPct(c.churn_proba)}</td>
+      <td>${fmtMoney(c.MonthlyRevenue)}</td>
+      <td>${fmtMonths(c.MonthsInService)}</td>
+      <td class="cell-action">
+        <button class="action-link" onclick="event.stopPropagation(); openCustomer(${c.CustomerID})">
+          Analizi Aç
+          <svg class="icon" viewBox="0 0 24 24"><use href="#icon-arrow-right"/></svg>
+        </button>
+      </td>
+    </tr>
+  `;
+}
+
+function openCustomer(id) {
+  window.location.href = `/temsilci?cid=${id}&readonly=1`;
+}
+
+function renderTable(tableId, customers, tier, subCountId, emptyText) {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  const subCount = document.getElementById(subCountId);
+  subCount.textContent = customers.length + ' müşteri';
+  if (customers.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">${emptyText}</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = customers.map(c => rowHTML(c, tier)).join('');
+}
+
+async function loadData() {
+  try {
+    const res = await fetch('/api/customers/top-risky', {
+      headers: { 'Authorization': 'Bearer ' + TOKEN }
+    });
+    if (res.status === 401) { logoutAndRedirect(); return; }
+    const data = await res.json();
+    if (!res.ok) {
+      showError(extractError(data) || 'Veri yüklenemedi.');
+      return;
+    }
+
+    completeProgress();
+    clearInterval(loadingInterval);
+
+    setTimeout(() => {
+      const acil = data.acil || [];
+      const proaktif = data.proaktif || [];
+      const sadakat = data.sadakat || [];
+      const total = acil.length + proaktif.length + sadakat.length;
+
+      document.getElementById('totalCount').textContent = total;
+      document.getElementById('acilCount').textContent = acil.length;
+      document.getElementById('proaktifCount').textContent = proaktif.length;
+      document.getElementById('sadakatCount').textContent = sadakat.length;
+
+      renderTable('acilTable', acil, 'acil', 'acilSubCount', 'Bu segmentte müşteri bulunamadı.');
+      renderTable('proaktifTable', proaktif, 'proaktif', 'proaktifSubCount', 'Bu segmentte müşteri bulunamadı.');
+      renderTable('sadakatTable', sadakat, 'sadakat', 'sadakatSubCount', 'Bu segmentte müşteri bulunamadı.');
+
+      document.getElementById('loadingArea').style.display = 'none';
+      const content = document.getElementById('contentArea');
+      content.style.display = 'block';
+      content.classList.add('fade-in');
+
+      document.getElementById('pdfBtn').disabled = false;
+    }, 500);
+  } catch (e) {
+    showError('Sunucuya bağlanılamadı.');
+  }
+}
+
+function showError(msg) {
+  loadingActive = false;
+  clearInterval(loadingInterval);
+  document.getElementById('loadingArea').style.display = 'none';
+  document.getElementById('errorArea').innerHTML = `
+    <div class="error-banner">
+      <svg class="icon" viewBox="0 0 24 24"><use href="#icon-warning"/></svg>
+      <span>${msg}</span>
+    </div>`;
+}
+
+async function downloadPDF() {
+  const btn = document.getElementById('pdfBtn');
+  const oldHTML = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><use href="#icon-loader"/></svg> Hazırlanıyor...';
+  try {
+    const res = await fetch('/api/report/pdf', {
+      headers: { 'Authorization': 'Bearer ' + TOKEN }
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      alert('PDF oluşturulamadı: ' + (extractError(data) || res.statusText));
+      return;
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'pulse_ai_raporu.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert('Bağlantı hatası: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = oldHTML;
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>

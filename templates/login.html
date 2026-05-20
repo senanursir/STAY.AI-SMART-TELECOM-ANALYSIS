@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAY.ai — Giriş · Akıllı Telekom Müşteri Analizi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cyan: #00d4ff; --cyan2: #0099cc; --purple: #8b6dff;
+  --red: #ff5577; --green: #00e89e;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --font-display: 'Manrope', 'Inter', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body.dark {
+  --bg: #07091c; --bg2: #0a1430;
+  --surface: rgba(80,140,255,0.05);
+  --surface2: rgba(80,140,255,0.09);
+  --surface3: rgba(80,140,255,0.14);
+  --border: rgba(120,170,255,0.11);
+  --border2: rgba(120,170,255,0.18);
+  --border3: rgba(120,170,255,0.28);
+  --text: #f0f3ff;
+  --text2: #b5bedb;
+  --text3: #6e7796;
+  --gradient-text-start: #ffffff;
+  --gradient-text-end: #a4b0d8;
+  --atmo-1: rgba(0,170,255,0.13);
+  --atmo-2: rgba(60,130,255,0.10);
+  --atmo-3: rgba(139,109,255,0.06);
+}
+
+body.light {
+  --bg: #eef3fb; --bg2: #e3edfa;
+  --surface: rgba(40,90,200,0.05);
+  --surface2: rgba(40,90,200,0.09);
+  --surface3: rgba(40,90,200,0.14);
+  --border: rgba(20,60,150,0.11);
+  --border2: rgba(20,60,150,0.17);
+  --border3: rgba(20,60,150,0.25);
+  --text: #0d1228;
+  --text2: #4a5374;
+  --text3: #828ba8;
+  --gradient-text-start: #0d1228;
+  --gradient-text-end: #4a5374;
+  --cyan: #0099cc; --cyan2: #007aa3;
+  --red: #d92e52; --green: #00a972;
+  --atmo-1: rgba(0,130,220,0.14);
+  --atmo-2: rgba(40,100,200,0.10);
+  --atmo-3: rgba(139,109,255,0.06);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html, body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.011em;
+  overflow-x: hidden;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 65% 50% at 12% -8%, var(--atmo-1) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 88% 102%, var(--atmo-2) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 50% 50%, var(--atmo-3) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+.icon {
+  width: 16px; height: 16px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.theme-toggle-fixed {
+  position: fixed;
+  top: 20px; right: 24px;
+  z-index: 50;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 8px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle-fixed:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+}
+
+.login-page {
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px 56px;
+  border-right: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-side::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(0,212,255,0.07) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(139,109,255,0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.brand-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 540px;
+}
+
+.brand-logo {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 64px;
+}
+
+.brand-logo-mark {
+  width: 38px; height: 38px; border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  display: grid; place-items: center;
+  color: #000;
+}
+
+.brand-logo-mark .icon { width: 18px; height: 18px; }
+
+.brand-logo-text-group {
+  display: flex; flex-direction: column;
+  line-height: 1.15;
+}
+
+.brand-logo-text {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+
+.brand-logo-tagline {
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+.brand-eyebrow {
+  display: inline-flex;
+  align-items: center; gap: 8px;
+  padding: 6px 14px;
+  background: rgba(0,212,255,0.08);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--cyan);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  width: fit-content;
+}
+
+.brand-eyebrow-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--cyan);
+}
+
+.brand-title {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  background: linear-gradient(170deg, var(--gradient-text-start) 0%, var(--gradient-text-end) 95%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-sub {
+  font-size: 1.05rem;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 40px;
+  max-width: 460px;
+}
+
+.brand-features {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 36px;
+}
+
+.brand-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.92rem;
+}
+
+.brand-feature-icon {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: var(--cyan);
+}
+
+.brand-feature-text strong {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.brand-feature-text span {
+  color: var(--text2);
+  font-size: 0.85rem;
+}
+
+.brand-footer {
+  position: relative;
+  z-index: 1;
+  font-size: 0.75rem;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-footer-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+}
+
+.login-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 56px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+}
+
+.login-header {
+  margin-bottom: 32px;
+}
+
+.login-header h1 {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
+.login-header p {
+  font-size: 0.92rem;
+  color: var(--text2);
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-md);
+  padding: 13px 16px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: var(--cyan);
+  background: var(--surface3);
+  box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+}
+
+.form-input::placeholder {
+  color: var(--text3);
+}
+
+.role-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.role-option {
+  padding: 14px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.role-option:hover {
+  border-color: var(--border3);
+}
+
+.role-option.active {
+  border-color: var(--cyan);
+  background: rgba(0,212,255,0.08);
+}
+
+.role-option .icon { width: 18px; height: 18px; color: var(--text2); }
+.role-option.active .icon { color: var(--cyan); }
+
+.role-option-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.role-option-desc {
+  font-size: 0.68rem;
+  color: var(--text3);
+}
+
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--cyan), var(--cyan2));
+  border: none;
+  border-radius: var(--radius-md);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.18s ease;
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.login-btn .icon { color: #000; }
+
+.login-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0,212,255,0.25);
+}
+
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.error-msg {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 11px 14px;
+  background: rgba(255,85,119,0.08);
+  border: 1px solid rgba(255,85,119,0.25);
+  border-radius: 10px;
+  color: var(--red);
+  font-size: 0.84rem;
+}
+
+.error-msg.active { display: flex; }
+
+.demo-hint {
+  margin-top: 28px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.78rem;
+  color: var(--text3);
+  line-height: 1.6;
+}
+
+.demo-hint-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+
+.demo-hint-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.demo-hint-row span:first-child { color: var(--text2); }
+.demo-hint-row span:last-child  { color: var(--text); font-weight: 600; }
+
+@media (max-width: 900px) {
+  .login-page { grid-template-columns: 1fr; }
+  .brand-side { display: none; }
+}
+</style>
+</head>
+<body class="dark">
+
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="icon-bolt" viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></symbol>
+    <symbol id="icon-warning" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="icon-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></symbol>
+    <symbol id="icon-brain" viewBox="0 0 24 24"><path d="M9.5 2A2.5 2.5 0 0112 4.5v15a2.5 2.5 0 01-4.96.44 2.5 2.5 0 01-2.96-3.08 3 3 0 01-.34-5.58 2.5 2.5 0 011.32-4.24 2.5 2.5 0 014.44-1.04zM14.5 2A2.5 2.5 0 0012 4.5v15a2.5 2.5 0 004.96.44 2.5 2.5 0 002.96-3.08 3 3 0 00.34-5.58 2.5 2.5 0 00-1.32-4.24 2.5 2.5 0 00-4.44-1.04z"/></symbol>
+    <symbol id="icon-bot" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M12 7V4M8 4h8M9 13h.01M15 13h.01M9 17h6"/></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="icon-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></symbol>
+  </defs>
+</svg>
+
+<button class="theme-toggle-fixed theme-toggle" onclick="PulseTheme.toggle()" title="Tema değiştir">
+  <svg class="icon sun-icon" viewBox="0 0 24 24"><use href="#icon-sun"/></svg>
+  <svg class="icon moon-icon" viewBox="0 0 24 24"><use href="#icon-moon"/></svg>
+</button>
+
+<div class="login-page">
+  <div class="brand-side">
+    <div class="brand-content">
+      <div class="brand-logo">
+        <div class="brand-logo-mark"><svg class="icon" viewBox="0 0 24 24"><use href="#icon-bolt"/></svg></div>
+        <div class="brand-logo-text-group">
+          <div class="brand-logo-text">STAY.ai</div>
+          <div class="brand-logo-tagline">Smart Telecom Analysis for You</div>
+        </div>
+      </div>
+
+      <div class="brand-eyebrow">
+        <span class="brand-eyebrow-dot"></span>
+        Smart Telecom Analysis for You
+      </div>
+
+      <h1 class="brand-title">Müşteriyi<br>kaybetmeden<br>tahmin et.</h1>
+      <p class="brand-sub">
+        SHAP açıklanabilirliği ve LLM tabanlı aksiyon önerileriyle
+        müşteri kayıp olasılığını anlık olarak analiz edin.
+      </p>
+
+      <div class="brand-features">
+        <div class="brand-feature">
+          <div class="brand-feature-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#icon-chart"/></svg></div>
+          <div class="brand-feature-text">
+            <strong>Bireysel Risk Skoru</strong>
+            <span>CatBoost modeli ile her müşteri için 0-100 arası kayıp olasılığı</span>
+          </div>
+        </div>
+        <div class="brand-feature">
+          <div class="brand-feature-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#icon-brain"/></svg></div>
+          <div class="brand-feature-text">
+            <strong>SHAP Açıklaması</strong>
+            <span>Riski hangi faktörlerin artırıp azalttığını görün</span>
+          </div>
+        </div>
+        <div class="brand-feature">
+          <div class="brand-feature-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#icon-bot"/></svg></div>
+          <div class="brand-feature-text">
+            <strong>AI Strateji Asistanı</strong>
+            <span>Müşteriye özel retention senaryoları ve teklif önerileri</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-footer">
+      <span class="brand-footer-dot"></span>
+      Tez Projesi · STAY.ai · 2026
+    </div>
+  </div>
+
+  <div class="login-side">
+    <div class="login-card">
+      <div class="login-header">
+        <h1>Hoş geldin</h1>
+        <p>Devam etmek için giriş yap.</p>
+      </div>
+
+      <div class="role-selector">
+        <div class="role-option active" data-role="agent" onclick="selectRole('agent')">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#icon-user"/></svg>
+          <div class="role-option-label">Temsilci</div>
+          <div class="role-option-desc">Müşteri sorgu</div>
+        </div>
+        <div class="role-option" data-role="manager" onclick="selectRole('manager')">
+          <svg class="icon" viewBox="0 0 24 24"><use href="#icon-users"/></svg>
+          <div class="role-option-label">Yönetici</div>
+          <div class="role-option-desc">Toplu analiz</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Kullanıcı Adı</label>
+        <input type="text" class="form-input" id="usernameInput" placeholder="kullanici" autocomplete="username"
+               onkeydown="if(event.key==='Enter') document.getElementById('passwordInput').focus()">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Şifre</label>
+        <input type="password" class="form-input" id="passwordInput" placeholder="••••••" autocomplete="current-password"
+               onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+
+      <button class="login-btn" id="loginBtn" onclick="doLogin()">
+        Giriş Yap
+        <svg class="icon" viewBox="0 0 24 24"><use href="#icon-arrow-right"/></svg>
+      </button>
+
+      <div class="error-msg" id="errorMsg">
+        <svg class="icon" viewBox="0 0 24 24"><use href="#icon-warning"/></svg>
+        <span id="errorMsgText"></span>
+      </div>
+
+      <div class="demo-hint">
+        <div class="demo-hint-title">Demo Erişimi</div>
+        <div class="demo-hint-row"><span>Temsilci</span><span>temsilci / 1234</span></div>
+        <div class="demo-hint-row"><span>Yönetici</span><span>yonetici / 5678</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const root = document.body;
+  window.PulseTheme = {
+    toggle() {
+      if (root.classList.contains('dark')) {
+        root.classList.remove('dark');
+        root.classList.add('light');
+      } else {
+        root.classList.remove('light');
+        root.classList.add('dark');
+      }
+      this.updateButton();
+    },
+    updateButton() {
+      const isDark = root.classList.contains('dark');
+      document.querySelectorAll('.theme-toggle .sun-icon').forEach(el => {
+        el.style.display = isDark ? 'none' : 'block';
+      });
+      document.querySelectorAll('.theme-toggle .moon-icon').forEach(el => {
+        el.style.display = isDark ? 'block' : 'none';
+      });
+    }
+  };
+  PulseTheme.updateButton();
+})();
+</script>
+<script>
+let selectedRole = 'agent';
+
+function selectRole(role) {
+  selectedRole = role;
+  document.querySelectorAll('.role-option').forEach(el => el.classList.remove('active'));
+  document.querySelector(`.role-option[data-role="${role}"]`).classList.add('active');
+
+  const userInput = document.getElementById('usernameInput');
+  if (!userInput.value || userInput.value === 'temsilci' || userInput.value === 'yonetici') {
+    userInput.value = role === 'agent' ? 'temsilci' : 'yonetici';
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  document.getElementById('errorMsgText').textContent = msg;
+  el.classList.add('active');
+}
+
+function hideError() {
+  document.getElementById('errorMsg').classList.remove('active');
+}
+
+function extractError(data) {
+  if (!data) return null;
+  if (typeof data.detail === 'string') return data.detail;
+  if (Array.isArray(data.detail)) return data.detail.map(e => (e && e.msg) ? e.msg : JSON.stringify(e)).join(' | ');
+  if (data.detail) return JSON.stringify(data.detail);
+  return null;
+}
+
+async function doLogin() {
+  const username = document.getElementById('usernameInput').value.trim();
+  const password = document.getElementById('passwordInput').value.trim();
+
+  if (!username || !password) {
+    showError('Kullanıcı adı ve şifre gerekli.');
+    return;
+  }
+
+  hideError();
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'Giriş yapılıyor...';
+
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showError(extractError(data) || 'Giriş başarısız.');
+      btn.disabled = false;
+      btn.innerHTML = 'Giriş Yap <svg class="icon" viewBox="0 0 24 24"><use href="#icon-arrow-right"/></svg>';
+      return;
+    }
+
+    sessionStorage.setItem('pulse_token', data.token);
+    sessionStorage.setItem('pulse_role', data.role);
+    sessionStorage.setItem('pulse_name', data.name);
+
+    window.location.href = data.role === 'manager' ? '/yonetici' : '/temsilci';
+  } catch (e) {
+    showError('Sunucuya bağlanılamadı.');
+    btn.disabled = false;
+    btn.innerHTML = 'Giriş Yap <svg class="icon" viewBox="0 0 24 24"><use href="#icon-arrow-right"/></svg>';
+  }
+}
+
+if (sessionStorage.getItem('pulse_token')) {
+  const role = sessionStorage.getItem('pulse_role');
+  window.location.href = role === 'manager' ? '/yonetici' : '/temsilci';
+}
+</script>
+</body>
+</html>
