@@ -4,8 +4,7 @@
 
 ### Akıllı Telekom Müşteri Analizi
 *Smart Telecom Analysis for You*
-
-**Açıklanabilir Yapay Zeka ve LLM Tabanlı Müşteri Kayıp Önleme Sistemi**
+> **Telekom sektöründe müşteri kayıp riskini açıklayan ve aksiyon öneren, AI destekli uçtan uca karar destek sistemi.**
 
 [![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-green.svg)](https://fastapi.tiangolo.com/)
